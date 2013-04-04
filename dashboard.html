@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Uber | Favorite Location Manager</title>
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+    <script src='http://underscorejs.org/underscore-min.js'></script>
+    <script src='http://backbonejs.org/backbone-min.js'></script>
+    <script src="/dashboard.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h1>Uber Favorite Location Manager</h1>
+      <div class="span6">
+        <h3>Add New Location</h3>
+        <ul id="new-location"></ul>
+      </div>
+      <div class="span6">
+        <h3>Favorite Locations</h3>
+        <ul class="favorite-locations"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Templates -->
+  <script type="text/template" id="location-template">
+    <li><%- address %></li>
+  </script>
+
+  <script type="text/template" id="item-template">
+    <div class="view">
+      <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+      <label><%- title %></label>
+      <a class="destroy"></a>
+    </div>
+    <input class="edit" type="text" value="<%- title %>" />
+  </script>
+
+</body>
+</html>

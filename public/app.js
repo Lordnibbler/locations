@@ -54,7 +54,7 @@ function do_edit(location) {
     error: onerror,
     success: function() {
       print_location(location);
-      do_delete(location);
+      // do_delete(location);
       //do_success();
     }
   });

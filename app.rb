@@ -3,6 +3,7 @@ $:.unshift File.expand_path('../../../lib', __FILE__)
 require 'sinatra/base'
 require 'sequel'
 require 'sinatra/backbone'
+require 'json'
 
 DB = Sequel.connect("sqlite::memory:")
 DB.create_table :locations do
@@ -30,6 +31,7 @@ class App < Sinatra::Base
   register Sinatra::RestAPI
 
   rest_create("/location") { Location.new }
+  rest_resource("/locations") { Location[1] }
   rest_resource("/location/:id") { |id| Location[id] }
 
   set :root,   File.expand_path('../', __FILE__)
@@ -38,6 +40,11 @@ class App < Sinatra::Base
 
   get '/' do
     erb :home
+  end
+
+  get '/dashboard' do
+    # erb :dashboard
+    send_file "dashboard.html"
   end
 
   # alternatively, run rackup -p 4567 in terminal
