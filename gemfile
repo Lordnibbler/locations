@@ -1,5 +1,4 @@
 source 'http://rubygems.org'
 gem 'sinatra'
-# gem 'sinatra/base'
 gem 'sequel'
-gem 'sinatra/backbone'
+gem 'sinatra-backbone'
