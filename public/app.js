@@ -1,6 +1,6 @@
 // Here is our Backbone model!
-Book = Backbone.Model.extend({
-  urlRoot: '/book'
+Location = Backbone.Model.extend({
+  urlRoot: '/location'
 });
 
 $(function() {
@@ -8,73 +8,74 @@ $(function() {
 });
 
 function do_create() {
-  echo("<h3>Creating a book:</h3>");
+  echo("<h3>Creating a location:</h3>");
 
-  var book = new Book;
-  book.set({ title: "Darkly Dreaming Dexter", author: "Jeff Lindsay" });
-  book.save({}, {
+  var location = new Location;
+  location.set({ name: "Test location", address: "902 Haight St, San Francisco CA 94117" });
+  location.save({}, {
     error: onerror,
     success: function() {
-      print_book(book);
-      echo("<h3>Retrieving the same book:</h3>");
-      do_retrieve(book);
+      print_location(location);
+      echo("<h3>Retrieving the same location:</h3>");
+      do_retrieve(location);
     }
   });
 }
 
-function do_retrieve(_book) {
-  var book = new Book({ id: _book.id });
-  book.fetch({
+function do_retrieve(_location) {
+  var location = new Location({ id: _location.id });
+  location.fetch({
     error: onerror,
     success: function() {
-      print_book(book);
-      do_edit_error(book);
+      print_location(location);
+      do_edit_error(location);
     }
   });
 }
 
-function do_edit_error(book) {
-  echo("<h3>Editing book with an error:</h3>");
+function do_edit_error(location) {
+  echo("<h3>Editing location with an error:</h3>");
   console.log("(You should see an HTTP error right about here:)");
-  book.set({ author: '' });
-  book.save({}, {
+  location.set({ name: '' });
+  location.save({}, {
     success: onerror,
     error: function() {
       console.log("(...yep.)");
       echo("...yes, it occured.");
-      do_edit(book);
+      do_edit(location);
     }
   });
 }
 
-function do_edit(book) {
-  echo("<h3>Editing book:</h3>");
-  book.set({ author: 'Anne Rice', title: 'The Claiming of Sleeping Beauty' });
-  book.save({}, {
+function do_edit(location) {
+  echo("<h3>Editing location:</h3>");
+  location.set({ name: 'Test location 2', address: '3224 23rd St' });
+  location.save({}, {
     error: onerror,
     success: function() {
-      print_book(book);
-      do_delete(book);
+      print_location(location);
+      do_delete(location);
+      //do_success();
     }
   });
 }
 
-function do_delete(book) {
-  echo("<h3>Deleting book:</h3>");
-  book.destroy({
+function do_delete(location) {
+  echo("<h3>Deleting location:</h3>");
+  location.destroy({
     error: onerror,
     success: function() {
-      echo("Success.");
-      do_verify_delete(book.id);
+      echo("Successfully deleted!");
+      do_verify_delete(location.id);
     }
   });
 }
 
 function do_verify_delete(id) {
-  echo("<h3>Checking if book "+id+" still exists:</h3>");
+  echo("<h3>Checking if location "+id+" still exists:</h3>");
   console.log("(You should see an HTTP error right about here:)");
-  var book = new Book({ id: id });
-  book.fetch({
+  var location = new Location({ id: id });
+  location.fetch({
     success: onerror,
     error: function() {
       console.log("(...yep.)");
@@ -88,10 +89,10 @@ function do_success() {
   echo("<h3>Success!</h3>");
 }
 
-function print_book(book) {
-  echo("<dl><dt>Title:</dt><dd>"+book.get('title')+"</dd></dl>");
-  echo("<dl><dt>Author:</dt><dd>"+book.get('author')+"</dd></dl>");
-  echo("<dl><dt>ID:</dt><dd>"+book.get('id')+"</dd></dl>");
+function print_location(location) {
+  echo("<dl><dt>Name:</dt><dd>"+location.get('name')+"</dd></dl>");
+  echo("<dl><dt>Address:</dt><dd>"+location.get('address')+"</dd></dl>");
+  echo("<dl><dt>ID:</dt><dd>"+location.get('id')+"</dd></dl>");
 }
 
 // Helper functions

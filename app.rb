@@ -5,19 +5,21 @@ require 'sequel'
 require 'sinatra/backbone'
 
 DB = Sequel.connect("sqlite::memory:")
-DB.create_table :books do
+DB.create_table :locations do
   primary_key :id
-  String :title
-  String :author
+  Float :latitude
+  Float :longitude
+  String :address
+  String :name
 end
 
-class Book < Sequel::Model
+class Location < Sequel::Model
   def to_hash
-    { :id => id, :title => title, :author => author }
+    { :id => id, :latitude => latitude, :longitude => longitude, :address => address, :name => name }
   end
 
   def validate
-    errors.add :author, "can't be empty"  if author.to_s.size == 0
+    errors.add :name, "can't be empty"  if name.to_s.size == 0
   end
 end
 
@@ -27,8 +29,8 @@ class App < Sinatra::Base
 
   register Sinatra::RestAPI
 
-  rest_create("/book") { Book.new }
-  rest_resource("/book/:id") { |id| Book[id] }
+  rest_create("/location") { Location.new }
+  rest_resource("/location/:id") { |id| Location[id] }
 
   set :root,   File.expand_path('../', __FILE__)
   set :views,  File.expand_path('../', __FILE__)
