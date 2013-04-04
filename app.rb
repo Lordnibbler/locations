@@ -32,9 +32,13 @@ class App < Sinatra::Base
 
   set :root,   File.expand_path('../', __FILE__)
   set :views,  File.expand_path('../', __FILE__)
-  set :public, File.expand_path('../public', __FILE__)
+  set :public_folder, File.expand_path('../public', __FILE__)
 
   get '/' do
     erb :home
   end
+
+  # alternatively, run rackup -p 4567 in terminal
+  run! if app_file == $0
 end
+
