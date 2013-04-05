@@ -83,12 +83,12 @@ $(function(){
 
     // The DOM events specific to an item.
     events: {
-      // "click .toggle"         : "toggleDone",
-      // "dblclick .view"        : "edit",
-      // "click a.destroy"       : "clear",
-      // "keypress .edit"        : "updateOnEnter",
-      // "blur .edit"            : "close"
-      "click button.btn.primary" : "render"
+      // "click .toggle"          : "toggleDone",
+      // "dblclick .view"            : "edit",
+      // "click a.destroy"        : "clear",
+      // "keypress .edit"         : "updateOnEnter",
+      // "blur .edit"             : "close",
+      // "click button.btn.primary"  : "render"
     },
 
     // The LocationView listens for changes to its model, re-rendering. Since there's
@@ -104,8 +104,8 @@ $(function(){
       console.log("rendering")
       this.$el.html(this.template(this.model.toJSON()));
       this.$el.toggleClass('done', this.model.get('done'));
-      this.input = this.$('.edit');
-      console.log(this)
+      // this.input = this.$('.edit');
+
       return this;
     },
 
@@ -158,9 +158,10 @@ $(function(){
 
     // Delegated events for creating new items, and clearing completed ones.
     events: {
-      "keypress #new-todo":  "createOnEnter",
-      "click #clear-completed": "clearCompleted",
-      "click #toggle-all": "toggleAllComplete"
+      // "keypress #new-todo":  "createOnEnter",
+      // "click #clear-completed": "clearCompleted",
+      // "click #toggle-all": "toggleAllComplete",
+      "click a.new-location": "create"
     },
 
     // At initialization we bind to the relevant events on the `Todos`
@@ -169,6 +170,9 @@ $(function(){
     initialize: function() {
 
       this.input = this.$("#new-todo");
+      this.location_address = this.$('#new-location-address');
+      this.location_name = this.$('#new-location-name');
+
       this.allCheckbox = this.$("#toggle-all")[0];
 
       this.listenTo(Locations, 'add', this.addOne);
@@ -201,8 +205,8 @@ $(function(){
 
     // Add a single todo item to the list by creating a view for it, and
     // appending its element to the `<ul>`.
-    addOne: function(todo) {
-      var view = new LocationView({model: todo});
+    addOne: function(location) {
+      var view = new LocationView({model: location});
       this.$("#favorite-locations").append(view.render().el);
     },
 
@@ -219,6 +223,23 @@ $(function(){
 
       Locations.create({title: this.input.val()});
       this.input.val('');
+    },
+
+    create: function() {
+      console.log("creating")
+
+      // get name and address data
+      console.log(this);
+      var location_address = this.location_address.val();
+      var location_name = this.location_name.val();
+      // validate that data exists
+      if (!location_address || !location_name) {
+        // no data
+      } else {
+        // create a new model
+        Locations.create({ name: location_name, address: location_address })
+      }
+
     },
 
     // Clear all done todo items, destroying their models.
