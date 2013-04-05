@@ -1,7 +1,7 @@
 // Here is our Backbone model!
-Location = Backbone.Model.extend({
-  urlRoot: '/location'
-});
+// Location = Backbone.Model.extend({
+//   urlRoot: '/location'
+// });
 
 // Load the application once the DOM is ready, using `jQuery.ready`:
 $(function(){
@@ -32,8 +32,7 @@ $(function(){
   // Location Collection
   // ---------------
 
-  // The collection of todos is backed by *localStorage* instead of a remote
-  // server.
+  // The collection of loctions is backed by postgres
   var LocationList = Backbone.Collection.extend({
 
     // Reference to this collection's model.
@@ -65,14 +64,14 @@ $(function(){
 
   });
 
-  // Create our global collection of **Todos**.
+  // Create our global collection of **Locations**.
   var Locations = new LocationList;
 
 
   // Location Item View
   // --------------
 
-  // The DOM element for a todo item...
+  // The DOM element for a location...
   var LocationView = Backbone.View.extend({
 
     //... is a list tag.

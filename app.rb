@@ -1,7 +1,6 @@
 $:.unshift File.expand_path('../../../lib', __FILE__)
 
 require 'sinatra/base'
-require 'sinatra/backbone'
 require 'json'
 require 'data_mapper'
 
@@ -37,12 +36,6 @@ class App < Sinatra::Base
   set :views,  File.expand_path('../', __FILE__)
   set :public_folder, File.expand_path('../public', __FILE__)
 
-  register Sinatra::RestAPI
-
-  rest_create("/locations") { Location.new }
-  rest_resource("/locations") { Location.all }
-  rest_resource("/locations/:id") { |id| Location.find(:id => id) }
-
   get '/' do
     erb :home
   end
@@ -74,10 +67,26 @@ class App < Sinatra::Base
   #   # update an existing location
 
   # end
-  # delete '/location/:id' do
-  #   # delete an item
-  #   Location.destroy(params[:location])
-  # end
+
+  get '/locations' do
+    Location.all.to_json
+  end
+
+  delete '/locations/:id' do
+    # delete an item
+    loc = Location.get(params[:id])
+    loc.destroy
+  end
+
+  post '/locations' do
+    # Location.create()
+    # puts params
+    # puts request.body.read.to_hash
+    # puts request.POST
+    # Location.create(request.body.read)
+    params = JSON.parse(request.body.read.to_s)
+    Location.create(params)
+  end
 
   # alternatively, run rackup -p 4567 in terminal
   run! if app_file == $0
