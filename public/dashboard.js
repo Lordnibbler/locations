@@ -18,7 +18,7 @@ $(function(){
         longitude: 0.0,
         latitude: 0.0,
         address: "123 Pleasant St",
-        name: "Default Name"
+        name: "Pleasantville"
       };
     },
 
@@ -68,7 +68,6 @@ $(function(){
   // Create our global collection of **Todos**.
   var Locations = new LocationList;
 
-  console.log(Locations);
 
   // Location Item View
   // --------------
@@ -84,11 +83,12 @@ $(function(){
 
     // The DOM events specific to an item.
     events: {
-      // "click .toggle"   : "toggleDone",
-      // "dblclick .view"  : "edit",
-      // "click a.destroy" : "clear",
-      // "keypress .edit"  : "updateOnEnter",
-      // "blur .edit"      : "close"
+      // "click .toggle"         : "toggleDone",
+      // "dblclick .view"        : "edit",
+      // "click a.destroy"       : "clear",
+      // "keypress .edit"        : "updateOnEnter",
+      // "blur .edit"            : "close"
+      "click button.btn.primary" : "render"
     },
 
     // The LocationView listens for changes to its model, re-rendering. Since there's
@@ -101,9 +101,11 @@ $(function(){
 
     // Re-render the titles of the todo item.
     render: function() {
+      console.log("rendering")
       this.$el.html(this.template(this.model.toJSON()));
       this.$el.toggleClass('done', this.model.get('done'));
       this.input = this.$('.edit');
+      console.log(this)
       return this;
     },
 
@@ -201,7 +203,7 @@ $(function(){
     // appending its element to the `<ul>`.
     addOne: function(todo) {
       var view = new LocationView({model: todo});
-      this.$("#todo-list").append(view.render().el);
+      this.$("#favorite-locations").append(view.render().el);
     },
 
     // Add all items in the **Todos** collection at once.

@@ -17,18 +17,25 @@
       <h1>Uber Favorite Location Manager</h1>
       <div class="span6">
         <h3>Add New Location</h3>
-        <ul id="new-location"></ul>
+        <form id="new-location">
+          <label for="new-location-name">New Location Name</label>
+          <input type="text" id="new-location-name" />
+          <label for="new-location-address">New Location Address</label>
+          <input type="text" id="new-location-address" />
+          <br/>
+          <button class="btn primary">Submit</button>
+        </form>
       </div>
       <div class="span6">
         <h3>Favorite Locations</h3>
-        <ul class="favorite-locations"></ul>
+        <ul id="favorite-locations"></ul>
       </div>
     </div>
   </div>
 
   <!-- Templates -->
   <script type="text/template" id="location-template">
-    <li><%- address %></li>
+    <li><%- name %><%- address %></li>
   </script>
 
   <script type="text/template" id="item-template">
