@@ -35,7 +35,11 @@
 
   <!-- Templates -->
   <script type="text/template" id="location-template">
-    <li><%- name %><br/><%- address %></li>
+    <li>
+      <%- name %><br/><%- address %><br/>
+      <a class="btn btn-mini" href="#"><i class="icon-edit"></i> Edit</a>
+      <a class="btn btn-mini" href="#"><i class="icon-remove"></i> Delete</a>
+    </li>
   </script>
 
   <script type="text/template" id="item-template">
