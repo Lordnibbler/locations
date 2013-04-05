@@ -72,17 +72,15 @@ $(function(){
     //... is a list tag.
     tagName:  "li",
 
-    // Cache the template function for a single item.
+    // Cache the template function for a single location.
     template: _.template($('#location-template').html()),
 
-    // The DOM events specific to an item.
+    // The DOM events specific to a location.
     events: {
-      // "click .toggle"          : "toggleDone",
-      // "dblclick .view"            : "edit",
-      "click a.destroy"        : "clear",
-      // "keypress .edit"         : "updateOnEnter",
-      // "blur .edit"             : "close",
-      // "click button.btn.primary"  : "render"
+      "dblclick li"     : "edit",
+      "click a.destroy" : "clear",
+      "keypress .edit"  : "updateOnEnter",
+      "blur .edit"      : "close",
     },
 
     // The LocationView listens for changes to its model, re-rendering. Since there's
@@ -96,8 +94,10 @@ $(function(){
     // Re-render the titles of the todo item.
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
-      this.$el.toggleClass('done', this.model.get('done'));
+      // this.$el.toggleClass('done', this.model.get('done'));
       // this.input = this.$('.edit');
+      this.location_name = this.$('.edit.location-name');
+      this.location_address = this.$('.edit.location-address');
 
       return this;
     },
@@ -110,16 +110,17 @@ $(function(){
     // Switch this view into `"editing"` mode, displaying the input field.
     edit: function() {
       this.$el.addClass("editing");
-      this.input.focus();
+      this.location_name.focus();
     },
 
     // Close the `"editing"` mode, saving changes to the todo.
     close: function() {
-      var value = this.input.val();
-      if (!value) {
+      var location_name = this.location_name.val();
+      var location_address = this.location_address.val();
+      if (!location_name || !location_address) {
         this.clear();
       } else {
-        this.model.save({title: value});
+        this.model.save({name: location_name, address: location_address});
         this.$el.removeClass("editing");
       }
     },
