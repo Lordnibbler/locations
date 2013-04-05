@@ -51,10 +51,12 @@ class App < Sinatra::Base
   #   Location.where(:id => params[:id]).first
   # end
 
-  put '/location/:id' do
+  put '/locations/:id' do
     # PUT (update) an existing location
+    # puts params
     location = Location.get(params[:id])
-    # location.update(params)
+    params = JSON.parse(request.body.read.to_s)
+    location.update(params)
   end
 
   get '/locations' do
