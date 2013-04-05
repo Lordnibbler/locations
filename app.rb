@@ -26,7 +26,7 @@ class App < Sinatra::Base
   register Sinatra::RestAPI
 
   rest_create("/location") { Location.new }
-  rest_resource("/locations") { Location.all.to_json }
+  rest_resource("/locations") { Location.all }
   rest_resource("/location/:id") { |id| Location[id] }
 
   set :root,   File.expand_path('../', __FILE__)
