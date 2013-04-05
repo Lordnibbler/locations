@@ -37,10 +37,10 @@
   <!-- Templates -->
   <script type="text/template" id="location-template">
     <li>
-      <%- name %>
-      <input class="edit location-name" type="text" value="<%- name %>" /><br/>
-      <%- address %>
-      <input class="edit location-address" type="text" value="<%- address %>" /><br/>
+      <span class="location-name"><%- name %></span>
+      <input class="edit location-name" type="text" value="<%- name %>" />
+      <span class="lbl location-address"><%- address %></span>
+      <input class="edit location-address" type="text" value="<%- address %>" />
       <a class="btn btn-mini edit" href="#"><i class="icon-edit"></i> Edit</a>
       <a class="btn btn-mini destroy" href="#"><i class="icon-remove"></i> Delete</a>
     </li>

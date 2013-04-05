@@ -1,9 +1,19 @@
+#favorite-locations li {
+  list-style: none;
+}
+
+
 #favorite-locations li input.edit {
   display:none;
-  /*display: block;*/
-  /*clear:both;*/
 }
 #favorite-locations li.editing input.edit {
   display:block;
   clear:both;
+}
+#favorite-locations li span {
+  display:block;
+  clear:both;
+}
+#favorite-locations li.editing span {
+  display:none;
 }
