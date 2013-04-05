@@ -23,15 +23,16 @@ class App < Sinatra::Base
   enable   :raise_errors, :logging
   enable   :show_exceptions  if development?
 
+  set :root,   File.expand_path('../', __FILE__)
+  set :views,  File.expand_path('../', __FILE__)
+  set :public_folder, File.expand_path('../public', __FILE__)
+
   register Sinatra::RestAPI
 
   rest_create("/location") { Location.new }
   rest_resource("/locations") { Location.all }
   rest_resource("/location/:id") { |id| Location[id] }
 
-  set :root,   File.expand_path('../', __FILE__)
-  set :views,  File.expand_path('../', __FILE__)
-  set :public_folder, File.expand_path('../public', __FILE__)
 
   get '/' do
     erb :home
