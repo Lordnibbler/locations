@@ -1,28 +1,23 @@
 $:.unshift File.expand_path('../../../lib', __FILE__)
 
 require 'sinatra/base'
-require 'sequel'
 require 'sinatra/backbone'
 require 'json'
+require 'data_mapper'
 
-DB = Sequel.connect("sqlite::memory:")
-DB.create_table :locations do
-  primary_key :id
-  Float :latitude
-  Float :longitude
-  String :address
-  String :name
+# DataMapper.setup(:default, 'sqlite::memory:')
+DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/uber')
+
+class Location
+  include DataMapper::Resource
+  property :id,        Serial    # An auto-increment integer key
+  property :latitude,  Float
+  property :longitude, Float
+  property :address,   String
+  property :name,      String
 end
+DataMapper.finalize
 
-class Location < Sequel::Model
-  def to_hash
-    { :id => id, :latitude => latitude, :longitude => longitude, :address => address, :name => name }
-  end
-
-  def validate
-    errors.add :name, "can't be empty"  if name.to_s.size == 0
-  end
-end
 
 class App < Sinatra::Base
   enable   :raise_errors, :logging
@@ -30,9 +25,9 @@ class App < Sinatra::Base
 
   register Sinatra::RestAPI
 
-  rest_create("/location") { Location.new }
-  rest_resource("/locations") { Location[1] }
-  rest_resource("/location/:id") { |id| Location[id] }
+  # rest_create("/location") { Location.new }
+  # rest_resource("/locations") { Location.to_json }
+  # rest_resource("/location/:id") { |id| Location[id] }
 
   set :root,   File.expand_path('../', __FILE__)
   set :views,  File.expand_path('../', __FILE__)
@@ -45,6 +40,33 @@ class App < Sinatra::Base
   get '/dashboard' do
     # erb :dashboard
     send_file "dashboard.html"
+  end
+
+
+  get '/create_sample_location' do
+    # Location.auto_migrate!
+    Location.create(:name => "test", :address => "test")
+  end
+
+  get '/locations' do
+    # list all locations available
+    Location.all.to_json
+  end
+  get '/location/:id' do
+    # get a single location
+    Location.where(:id => params[:id]).first
+  end
+  post '/location' do
+    # create a new location
+    Location.create(params[:location])
+  end
+  put '/location/:id' do
+    # update an existing location
+
+  end
+  delete '/location/:id' do
+    # delete an item
+    Location.destroy(params[:location])
   end
 
   # alternatively, run rackup -p 4567 in terminal

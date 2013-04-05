@@ -68,7 +68,7 @@ $(function(){
   // Create our global collection of **Todos**.
   var Locations = new LocationList;
 
-  console.log(Locations.models);
+  console.log(Locations);
 
   // Location Item View
   // --------------

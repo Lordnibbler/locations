@@ -1,4 +1,6 @@
 source 'http://rubygems.org'
 gem 'sinatra'
-gem 'sequel'
+# gem 'sequel'
 gem 'sinatra-backbone'
+gem 'data_mapper'
+gem 'dm-postgres-adapter'
