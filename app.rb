@@ -46,47 +46,38 @@ class App < Sinatra::Base
   end
 
 
-  # get '/create_sample_location' do
-  #   # Location.auto_migrate!
-  #   Location.create(:name => "test", :address => "test")
-  # end
-
-  # get '/locations' do
-  #   # list all locations available
-  #   Location.all.to_json
-  # end
   # get '/location/:id' do
   #   # get a single location
   #   Location.where(:id => params[:id]).first
   # end
-  # post '/location' do
-  #   # create a new location
-  #   Location.create(params[:location])
-  # end
-  # put '/location/:id' do
-  #   # update an existing location
 
-  # end
+  put '/location/:id' do
+    # PUT (update) an existing location
+    location = Location.get(params[:id])
+    # location.update(params)
+  end
 
   get '/locations' do
+    # GET all locations
     Location.all.to_json
   end
 
   delete '/locations/:id' do
-    # delete an item
-    loc = Location.get(params[:id])
-    loc.destroy
+    # DELETE a location
+    location = Location.get(params[:id])
+    location.destroy
   end
 
   post '/locations' do
-    # Location.create()
-    # puts params
-    # puts request.body.read.to_hash
-    # puts request.POST
-    # Location.create(request.body.read)
+    # CREATE a location
     params = JSON.parse(request.body.read.to_s)
     Location.create(params)
   end
+
+  # get '/create_sample_location' do
+  #   # Location.auto_migrate!
+  #   Location.create(:name => "test", :address => "test")
+  # end
 
   # alternatively, run rackup -p 4567 in terminal
   run! if app_file == $0

@@ -1,8 +1,3 @@
-// Here is our Backbone model!
-// Location = Backbone.Model.extend({
-//   urlRoot: '/location'
-// });
-
 // Load the application once the DOM is ready, using `jQuery.ready`:
 $(function(){
 
@@ -38,7 +33,7 @@ $(function(){
     // Reference to this collection's model.
     model: Location,
 
-    // Save all of the todo items under the `"todos-backbone"` namespace.
+    // Save all of the locations under the `"locations"` namespace.
     // localStorage: new Backbone.LocalStorage("todos-backbone"),
     url: '/locations'
 
@@ -100,7 +95,6 @@ $(function(){
 
     // Re-render the titles of the todo item.
     render: function() {
-      console.log("rendering")
       this.$el.html(this.template(this.model.toJSON()));
       this.$el.toggleClass('done', this.model.get('done'));
       // this.input = this.$('.edit');
