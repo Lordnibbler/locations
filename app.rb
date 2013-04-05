@@ -15,6 +15,14 @@ class Location
   property :longitude, Float
   property :address,   String
   property :name,      String
+
+  def to_hash
+    { :id        => id,
+      :latitude  => latitude,
+      :longitude => longitude,
+      :address   => address,
+      :name      => name }
+  end
 end
 DataMapper.finalize
 
@@ -29,7 +37,7 @@ class App < Sinatra::Base
 
   register Sinatra::RestAPI
 
-  rest_create("/location") { Location.new }
+  rest_create("/locations") { Location.new }
   rest_resource("/locations") { Location.all }
   rest_resource("/location/:id") { |id| Location[id] }
 

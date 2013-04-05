@@ -226,8 +226,6 @@ $(function(){
     },
 
     create: function() {
-      console.log("creating")
-
       // get name and address data
       console.log(this);
       var location_address = this.location_address.val();
