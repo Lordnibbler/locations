@@ -112,7 +112,6 @@ $(function(){
     // Switch this view into `"editing"` mode, displaying the input field.
     edit: function() {
       this.$el.addClass("editing");
-      // console.log(this.$("a.btn.done"));
       this.$("a.btn.done").css('display', 'inline-block');
       this.$("a.btn.edit").css('display', 'none');
       // this.location_name.focus();
@@ -162,7 +161,8 @@ $(function(){
       // "keypress #new-todo":  "createOnEnter",
       // "click #clear-completed": "clearCompleted",
       // "click #toggle-all": "toggleAllComplete",
-      "click a.new-location": "create"
+      "click a.new-location": "create",
+      "keypress input"      : "createOnEnter",
     },
 
     // At initialization we bind to the relevant events on the `Todos`
@@ -176,9 +176,9 @@ $(function(){
 
       this.allCheckbox = this.$("#toggle-all")[0];
 
-      this.listenTo(Locations, 'add', this.addOne);
+      this.listenTo(Locations, 'add',   this.addOne);
       this.listenTo(Locations, 'reset', this.addAll);
-      this.listenTo(Locations, 'all', this.render);
+      this.listenTo(Locations, 'all',   this.render);
 
       this.footer = this.$('footer');
       this.main = $('#main');
@@ -220,15 +220,16 @@ $(function(){
     // persisting it to *localStorage*.
     createOnEnter: function(e) {
       if (e.keyCode != 13) return;
-      if (!this.input.val()) return;
+      if (!this.location_address.val() || !this.location_name.val()) return;
 
-      Locations.create({title: this.input.val()});
-      this.input.val('');
+      Locations.create({name: this.location_name.val(), address: this.location_address.val()});
+      // clear the inputs
+      this.location_name.val('');
+      this.location_address.val('');
     },
 
     create: function() {
       // get name and address data
-      console.log(this);
       var location_address = this.location_address.val();
       var location_name = this.location_name.val();
       // validate that data exists
@@ -237,6 +238,9 @@ $(function(){
       } else {
         // create a new model
         Locations.create({ name: location_name, address: location_address })
+        // clear the inputs
+        this.location_name.val('');
+        this.location_address.val('');
       }
 
     },
