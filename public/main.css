@@ -1,14 +1,23 @@
 #favorite-locations li {
   list-style: none;
+  border-bottom:1px solid #ccc;
+  margin-bottom:10px;
+  padding-bottom:10px;
 }
-
-
+#favorite-locations li span {
+  margin:10px 0;
+}
+#favorite-locations li a.btn.done {
+  display:none;
+}
 #favorite-locations li input.edit {
   display:none;
 }
 #favorite-locations li.editing input.edit {
   display:block;
   clear:both;
+  width:100%;
+  margin-bottom:2px;
 }
 #favorite-locations li span {
   display:block;

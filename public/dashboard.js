@@ -77,10 +77,12 @@ $(function(){
 
     // The DOM events specific to a location.
     events: {
-      "dblclick li"     : "edit",
-      "click a.destroy" : "clear",
-      "keypress .edit"  : "updateOnEnter",
-      "blur .edit"      : "close",
+      "dblclick span"    : "edit",
+      "click a.edit"     : "edit",
+      "click a.destroy"  : "clear",
+      "keypress .edit"   : "updateOnEnter",
+      "click a.btn.done" : "close",
+      // "blur .edit"      : "close",
     },
 
     // The LocationView listens for changes to its model, re-rendering. Since there's
@@ -110,7 +112,10 @@ $(function(){
     // Switch this view into `"editing"` mode, displaying the input field.
     edit: function() {
       this.$el.addClass("editing");
-      this.location_name.focus();
+      // console.log(this.$("a.btn.done"));
+      this.$("a.btn.done").css('display', 'inline-block');
+      this.$("a.btn.edit").css('display', 'none');
+      // this.location_name.focus();
     },
 
     // Close the `"editing"` mode, saving changes to the todo.
@@ -122,6 +127,8 @@ $(function(){
       } else {
         this.model.save({name: location_name, address: location_address});
         this.$el.removeClass("editing");
+        this.$("a.btn.done").css('display', 'none');
+        this.$("a.btn.edit").css('display', 'inline-block');
       }
     },
 
@@ -133,7 +140,7 @@ $(function(){
     // Remove the item, destroy the model.
     clear: function() {
       this.model.destroy();
-    }
+    },
 
   });
 

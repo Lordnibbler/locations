@@ -36,14 +36,13 @@
 
   <!-- Templates -->
   <script type="text/template" id="location-template">
-    <li>
-      <span class="location-name"><%- name %></span>
-      <input class="edit location-name" type="text" value="<%- name %>" />
-      <span class="lbl location-address"><%- address %></span>
-      <input class="edit location-address" type="text" value="<%- address %>" />
-      <a class="btn btn-mini edit" href="#"><i class="icon-edit"></i> Edit</a>
-      <a class="btn btn-mini destroy" href="#"><i class="icon-remove"></i> Delete</a>
-    </li>
+    <span class="location-name"><%- name %></span>
+    <input class="edit location-name" type="text" value="<%- name %>" />
+    <span class="lbl location-address"><%- address %></span>
+    <input class="edit location-address" type="text" value="<%- address %>" />
+    <a class="btn btn-mini done" href="#"><i class="icon-ok"></i> Done</a>
+    <a class="btn btn-mini edit" href="#"><i class="icon-edit"></i> Edit</a>
+    <a class="btn btn-mini destroy" href="#"><i class="icon-remove"></i> Delete</a>
   </script>
 
 </body>
