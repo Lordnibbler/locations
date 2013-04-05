@@ -39,8 +39,7 @@ class App < Sinatra::Base
 
   rest_create("/locations") { Location.new }
   rest_resource("/locations") { Location.all }
-  rest_resource("/location/:id") { |id| Location[id] }
-
+  rest_resource("/locations/:id") { |id| Location.find(:id => id) }
 
   get '/' do
     erb :home
