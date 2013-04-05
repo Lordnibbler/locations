@@ -25,9 +25,9 @@ class App < Sinatra::Base
 
   register Sinatra::RestAPI
 
-  # rest_create("/location") { Location.new }
-  # rest_resource("/locations") { Location.to_json }
-  # rest_resource("/location/:id") { |id| Location[id] }
+  rest_create("/location") { Location.new }
+  rest_resource("/locations") { Location.all.to_json }
+  rest_resource("/location/:id") { |id| Location[id] }
 
   set :root,   File.expand_path('../', __FILE__)
   set :views,  File.expand_path('../', __FILE__)
@@ -43,31 +43,31 @@ class App < Sinatra::Base
   end
 
 
-  get '/create_sample_location' do
-    # Location.auto_migrate!
-    Location.create(:name => "test", :address => "test")
-  end
+  # get '/create_sample_location' do
+  #   # Location.auto_migrate!
+  #   Location.create(:name => "test", :address => "test")
+  # end
 
-  get '/locations' do
-    # list all locations available
-    Location.all.to_json
-  end
-  get '/location/:id' do
-    # get a single location
-    Location.where(:id => params[:id]).first
-  end
-  post '/location' do
-    # create a new location
-    Location.create(params[:location])
-  end
-  put '/location/:id' do
-    # update an existing location
+  # get '/locations' do
+  #   # list all locations available
+  #   Location.all.to_json
+  # end
+  # get '/location/:id' do
+  #   # get a single location
+  #   Location.where(:id => params[:id]).first
+  # end
+  # post '/location' do
+  #   # create a new location
+  #   Location.create(params[:location])
+  # end
+  # put '/location/:id' do
+  #   # update an existing location
 
-  end
-  delete '/location/:id' do
-    # delete an item
-    Location.destroy(params[:location])
-  end
+  # end
+  # delete '/location/:id' do
+  #   # delete an item
+  #   Location.destroy(params[:location])
+  # end
 
   # alternatively, run rackup -p 4567 in terminal
   run! if app_file == $0
