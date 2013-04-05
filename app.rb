@@ -46,14 +46,16 @@ class App < Sinatra::Base
   end
 
 
-  # get '/location/:id' do
-  #   # get a single location
-  #   Location.where(:id => params[:id]).first
-  # end
+  get '/locations/:id' do
+    # get a single location
+    location = Location.get(params[:id])
+    # params = JSON.parse(request.body.read.to_s)
+    location.to_json
+  end
 
   put '/locations/:id' do
     # PUT (update) an existing location
-    # puts params
+    # update this to check if params are different from location
     location = Location.get(params[:id])
     params = JSON.parse(request.body.read.to_s)
     location.update(params)
