@@ -86,7 +86,7 @@ $(function(){
     },
 
     // The LocationView listens for changes to its model, re-rendering. Since there's
-    // a one-to-one correspondence between a **Todo** and a **LocationView** in this
+    // a one-to-one correspondence between a **Location** and a **LocationView** in this
     // app, we set a direct reference on the model for convenience.
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
@@ -95,6 +95,7 @@ $(function(){
 
     // Re-render the titles of the todo item.
     render: function() {
+      console.log("rendering locationView")
       this.$el.html(this.template(this.model.toJSON()));
       // this.$el.toggleClass('done', this.model.get('done'));
       // this.input = this.$('.edit');
@@ -170,7 +171,7 @@ $(function(){
     // loading any preexisting todos that might be saved in *localStorage*.
     initialize: function() {
 
-      this.input = this.$("#new-todo");
+      // this.input = this.$("#new-todo");
       this.location_address = this.$('#new-location-address');
       this.location_name = this.$('#new-location-name');
 
@@ -180,8 +181,8 @@ $(function(){
       this.listenTo(Locations, 'reset', this.addAll);
       this.listenTo(Locations, 'all',   this.render);
 
-      this.footer = this.$('footer');
-      this.main = $('#main');
+      // this.footer = this.$('footer');
+      // this.main = $('#main');
 
       Locations.fetch();
     },
@@ -189,17 +190,18 @@ $(function(){
     // Re-rendering the App just means refreshing the statistics -- the rest
     // of the app doesn't change.
     render: function() {
+      console.log("rendering appView");
       // var done = Locations.done().length;
       // var remaining = Locations.remaining().length;
 
-      if (Locations.length) {
-        this.main.show();
-        this.footer.show();
+      // if (Locations.length) {
+        // this.main.show();
+        // this.footer.show();
         //this.footer.html(this.statsTemplate({done: done, remaining: remaining}));
-      } else {
-        this.main.hide();
-        this.footer.hide();
-      }
+      // } else {
+        // this.main.hide();
+        // this.footer.hide();
+      // }
 
       // this.allCheckbox.checked = !remaining;
     },
