@@ -80,10 +80,7 @@ class App < Sinatra::Base
     params = JSON.parse(request.body.read.to_s)
 
     # geocode the address
-    geo_data = Geocoder.search(params["address"]).first
-    params["address"] = geo_data.formatted_address
-    params["longitude"] = geo_data.longitude
-    params["latitude"] = geo_data.latitude
+    params = geo_code(params)
 
     # create a new location record in db
     location = Location.create(params)
@@ -93,6 +90,16 @@ class App < Sinatra::Base
   #   # Location.auto_migrate!
   #   Location.create(:name => "test", :address => "test")
   # end
+
+  def geo_code(params)
+    if params
+      geo_data = Geocoder.search(params["address"]).first
+      params["address"] = geo_data.formatted_address
+      params["longitude"] = geo_data.longitude
+      params["latitude"] = geo_data.latitude
+      params
+    end
+  end
 
   # alternatively, run rackup -p 4567 in terminal
   run! if app_file == $0
