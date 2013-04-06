@@ -3,6 +3,7 @@ $:.unshift File.expand_path('../../../lib', __FILE__)
 require 'sinatra/base'
 require 'json'
 require 'data_mapper'
+require 'geocoder'
 
 # DataMapper.setup(:default, 'sqlite::memory:')
 DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/uber')
@@ -74,8 +75,18 @@ class App < Sinatra::Base
 
   post '/locations' do
     # CREATE a location
+
+    # grab POST data
     params = JSON.parse(request.body.read.to_s)
-    Location.create(params)
+
+    # geocode the address
+    geo_data = Geocoder.search(params["address"]).first
+    params["address"] = geo_data.formatted_address
+    params["longitude"] = geo_data.longitude
+    params["latitude"] = geo_data.latitude
+
+    # create a new location record in db
+    location = Location.create(params)
   end
 
   # get '/create_sample_location' do
