@@ -57,9 +57,21 @@ class App < Sinatra::Base
   put '/locations/:id' do
     # PUT (update) an existing location
     # update this to check if params are different from location
+
+    # get existing location from db
     location = Location.get(params[:id])
+
+    # grab PUT data
     params = JSON.parse(request.body.read.to_s)
+
+    # geocode the address
+    params = geo_code(params)
+
+    # update location record in db
     location.update(params)
+
+    # return JSON
+    location.to_json
   end
 
   get '/locations' do
