@@ -185,7 +185,11 @@ $(function(){
       // this.footer = this.$('footer');
       // this.main = $('#main');
 
-      Locations.fetch({ update: true });
+      Locations.fetch({ update: true, success:this.fetchSuccessCallback() });
+    },
+
+    fetchSuccessCallback: function() {
+      console.log("fetch success");
     },
 
     // Re-rendering the App just means refreshing the statistics -- the rest
@@ -239,14 +243,14 @@ $(function(){
         // no data
       } else {
         // create a new model
-        Locations.create({ name: location_name, address: location_address })
+        Locations.create({ name: location_name, address: location_address }, { success: this.createSuccessCallback() });
         // clear the inputs
         this.location_name.val('');
         this.location_address.val('');
       }
     },
 
-    successCallback: function() {
+    createSuccessCallback: function() {
       console.log("added a new loc");
     },
 
@@ -264,4 +268,220 @@ $(function(){
 
   // Finally, we kick things off by creating the **App**.
   var App = new AppView;
+
+
+  // Googlemaps.backbone
+  // ---------------
+
+  // Sample Data
+  var museums = [
+    {
+      name: "Walker Art Center",
+      lat: 44.9796635,
+      lng: -93.2748776
+    },
+    {
+      name: "Science Museum of Minnesota",
+      lat: 44.9429618,
+      lng: -93.0981016
+    },
+    {
+      name: "The Museum of Russian Art",
+      lat: 44.9036337,
+      lng: -93.2755413
+    }
+  ];
+  var bars = [
+    {
+      name: "Park Tavern",
+      lat: 44.9413272,
+      lng: -93.3705791,
+    },
+    {
+      name: "Chatterbox Pub",
+      lat: 44.9393882,
+      lng: -93.2391039
+    },
+    {
+      name: "Acadia Cafe",
+      lat: 44.9709853,
+      lng: -93.2470717
+    }
+  ];
+
+  var App = {};
+
+
+  App.Location = Backbone.GoogleMaps.Location.extend({
+    idAttribute: 'name',
+    defaults: {
+      lat: 45,
+      lng: -93
+    }
+  });
+
+  App.LocationCollection = Backbone.GoogleMaps.LocationCollection.extend({
+    model: App.Location
+  });
+
+  App.InfoWindow = Backbone.GoogleMaps.InfoWindow.extend({
+    template: '#infoWindow-template',
+
+    events: {
+      'mouseenter h2': 'logTest'
+    },
+
+    logTest: function() {
+      console.log('test in InfoWindow');
+    }
+  });
+
+  App.MarkerView = Backbone.GoogleMaps.MarkerView.extend({
+    infoWindow: App.InfoWindow,
+
+    overlayOptions: {
+      draggable: true
+    },
+
+    initialize: function() {
+      _.bindAll(this, 'handleDragEnd');
+    },
+
+    mapEvents: {
+      'dragend' : 'handleDragEnd'
+    },
+
+    handleDragEnd: function(e) {
+      alert('Dropped at: \n Lat: ' + e.latLng.lat() + '\n lng: ' + e.latLng.lng());
+    }
+  });
+
+  App.MarkerCollectionView = Backbone.GoogleMaps.MarkerCollectionView.extend({
+    markerView: App.MarkerView
+  });
+
+  App.init = function() {
+    this.createMap();
+
+    this.places = new this.LocationCollection(museums);
+
+    // Render Markers
+    var markerCollectionView = new this.MarkerCollectionView({
+      collection: this.places,
+      map: this.map
+    });
+    markerCollectionView.render();
+
+    // Render ListView
+    var listView = new App.ListView({
+      collection: this.places
+    });
+    listView.render();
+  }
+
+  App.createMap = function() {
+    var mapOptions = {
+      center: new google.maps.LatLng(44.9796635, -93.2748776),
+      zoom: 11,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    // Instantiate map
+    this.map = new google.maps.Map($('#map_canvas')[0], mapOptions);
+  }
+
+
+  /**
+   * List view
+  */
+  App.ItemView = Backbone.View.extend({
+    template: '<%=name %>',
+    tagName: 'li',
+
+    events: {
+      'mouseenter': 'selectItem',
+      'mouseleave': 'deselectItem'
+    },
+
+    initialize: function() {
+      _.bindAll(this, 'render', 'selectItem', 'deselectItem')
+
+      this.model.on("remove", this.close, this);
+    },
+
+    render: function() {
+      var html = _.template(this.template, this.model.toJSON());
+      this.$el.html(html);
+
+      return this;
+    },
+
+    close: function() {
+      this.$el.remove();
+    },
+
+    selectItem: function() {
+      this.model.select();
+    },
+
+    deselectItem: function() {
+      this.model.deselect();
+    }
+  });
+
+  App.ListView = Backbone.View.extend({
+    tagName: 'ul',
+    className: 'overlay',
+    id: 'listing',
+
+    initialize: function() {
+      _.bindAll(this, "refresh", "addChild");
+
+      this.collection.on("reset", this.refresh, this);
+      this.collection.on("add", this.addChild, this);
+
+      this.$el.appendTo('body');
+    },
+
+    render: function() {
+      this.collection.each(this.addChild);
+    },
+
+    addChild: function(childModel) {
+      var childView = new App.ItemView({ model: childModel });
+      childView.render().$el.appendTo(this.$el);
+    },
+
+    refresh: function() {
+      this.$el.empty();
+      this.render();
+    }
+  });
+
+
+  $(document).ready(function() {
+    App.init();
+
+    $('#bars').click(function() {
+      App.places.reset(bars);
+    });
+
+    $('#museums').click(function() {
+      App.places.reset(museums);
+    });
+
+    $('#addBtn').click(function() {
+      App.places.add({
+        name: 'State Capitol Building',
+        lat: 44.9543075,
+        lng: -93.102222
+      });
+    });
+
+    $('#removeBtn').click(function() {
+      App.places.remove(App.places.at(0));
+    });
+  });
+
+
 });
