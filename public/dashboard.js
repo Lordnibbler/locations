@@ -180,7 +180,7 @@ $(function(){
       this.listenTo(Locations, 'add',   this.addOne);
       this.listenTo(Locations, 'reset', this.addAll);
       this.listenTo(Locations, 'all',   this.render);
-      this.listenTo(Locations, 'refresh', this.addAll);
+      // this.listenTo(Locations, 'refresh', this.addAll);
 
       // this.footer = this.$('footer');
       // this.main = $('#main');
