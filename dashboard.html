@@ -21,8 +21,8 @@
       <div class="span6">
         <h3>Add New Location</h3>
         <form id="new-location">
-          <label for="new-location-name">New Location Name</label>
-          <input type="text" id="new-location-name" />
+          <label for="new-location-title">New Location Title</label>
+          <input type="text" id="new-location-title" />
           <label for="new-location-address">New Location Address</label>
           <input type="text" id="new-location-address" />
           <br/>
@@ -43,8 +43,8 @@
 
   <!-- Templates -->
   <script type="text/template" id="location-template">
-    <span class="location-name"><%- name %></span>
-    <input class="edit location-name" type="text" value="<%- name %>" />
+    <span class="location-title"><%- title %></span>
+    <input class="edit location-title" type="text" value="<%- title %>" />
     <span class="lbl location-address"><%- address %></span>
     <input class="edit location-address" type="text" value="<%- address %>" />
     <a class="btn btn-mini done" href="#"><i class="icon-ok"></i> Done</a>
@@ -53,7 +53,7 @@
   </script>
 
   <script id="infoWindow-template" type="text/html">
-    <h4><%=name %></h4>
+    <h4><%=title %></h4>
     <p>Latitude: <%=lat %></p>
     <p>Longitude: <%=lng %></p>
   </script>

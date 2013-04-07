@@ -5,7 +5,7 @@ $(function(){
   // ----------
 
   // Our basic **Location** model has `long`, `lat`, `address`, and `name` attributes.
-  var Location = Backbone.Model.extend({
+  var Location = Backbone.GoogleMaps.Location.extend({
 
     // Default attributes for the todo item.
     defaults: function() {
@@ -13,7 +13,7 @@ $(function(){
         lng: 0.0,
         lat: 0.0,
         address: "123 Pleasant St",
-        name: "Pleasantville"
+        title: "Pleasantville"
       };
     },
 
@@ -62,7 +62,6 @@ $(function(){
   // Create our global collection of **Locations**.
   var Locations = new LocationList;
 
-
   // Location Item View
   // --------------
 
@@ -99,7 +98,7 @@ $(function(){
       this.$el.html(this.template(this.model.toJSON()));
       // this.$el.toggleClass('done', this.model.get('done'));
       // this.input = this.$('.edit');
-      this.location_name = this.$('.edit.location-name');
+      this.location_title = this.$('.edit.location-title');
       this.location_address = this.$('.edit.location-address');
 
       return this;
@@ -115,17 +114,17 @@ $(function(){
       this.$el.addClass("editing");
       this.$("a.btn.done").css('display', 'inline-block');
       this.$("a.btn.edit").css('display', 'none');
-      // this.location_name.focus();
+      // this.location_title.focus();
     },
 
     // Close the `"editing"` mode, saving changes to the todo.
     close: function() {
-      var location_name = this.location_name.val();
+      var location_title = this.location_title.val();
       var location_address = this.location_address.val();
-      if (!location_name || !location_address) {
+      if (!location_title || !location_address) {
         this.clear();
       } else {
-        this.model.save({name: location_name, address: location_address});
+        this.model.save({title: location_title, address: location_address});
         this.$el.removeClass("editing");
         this.$("a.btn.done").css('display', 'none');
         this.$("a.btn.edit").css('display', 'inline-block');
@@ -173,7 +172,7 @@ $(function(){
 
       // this.input = this.$("#new-todo");
       this.location_address = this.$('#new-location-address');
-      this.location_name    = this.$('#new-location-name');
+      this.location_title    = this.$('#new-location-title');
 
       // this.allCheckbox = this.$("#toggle-all")[0];
 
@@ -189,8 +188,8 @@ $(function(){
     },
 
     fetchSuccessCallback: function() {
-      console.log("fetch success");
-      console.log(Locations.toArray());
+      // console.log("fetch success");
+      // console.log(_(Locations.models).clone());
     },
 
     // Re-rendering the App just means refreshing the statistics -- the rest
@@ -230,7 +229,7 @@ $(function(){
     // persisting it to *db*.
     createOnEnter: function(e) {
       if (e.keyCode != 13) return;
-      if (!this.location_address.val() || !this.location_name.val()) return;
+      if (!this.location_address.val() || !this.location_title.val()) return;
 
       this.create();
     },
@@ -238,15 +237,15 @@ $(function(){
     create: function() {
       // get name and address data
       var location_address = this.location_address.val();
-      var location_name = this.location_name.val();
+      var location_title = this.location_title.val();
       // validate that data exists
-      if (!location_address || !location_name) {
+      if (!location_address || !location_title) {
         // no data
       } else {
         // create a new model
-        Locations.create({ name: location_name, address: location_address }, { success: this.createSuccessCallback() });
+        Locations.create({ title: location_title, address: location_address }, { success: this.createSuccessCallback() });
         // clear the inputs
-        this.location_name.val('');
+        this.location_title.val('');
         this.location_address.val('');
       }
     },
@@ -277,34 +276,34 @@ $(function(){
   // Sample Data
   var museums = [
     {
-      name: "Walker Art Center",
+      title: "Walker Art Center",
       lat: 44.9796635,
       lng: -93.2748776
     },
     {
-      name: "Science Museum of Minnesota",
+      title: "Science Museum of Minnesota",
       lat: 44.9429618,
       lng: -93.0981016
     },
     {
-      name: "The Museum of Russian Art",
+      title: "The Museum of Russian Art",
       lat: 44.9036337,
       lng: -93.2755413
     }
   ];
   var bars = [
     {
-      name: "Park Tavern",
+      title: "Park Tavern",
       lat: 44.9413272,
       lng: -93.3705791,
     },
     {
-      name: "Chatterbox Pub",
+      title: "Chatterbox Pub",
       lat: 44.9393882,
       lng: -93.2391039
     },
     {
-      name: "Acadia Cafe",
+      title: "Acadia Cafe",
       lat: 44.9709853,
       lng: -93.2470717
     }
@@ -313,17 +312,18 @@ $(function(){
   // var App = {};
 
 
-  App.Location = Backbone.GoogleMaps.Location.extend({
-    idAttribute: 'name',
-    defaults: {
-      lat: 45,
-      lng: -93
-    }
-  });
+  // App.Location = Backbone.GoogleMaps.Location.extend({
+  //   idAttribute: 'title',
+  //   defaults: {
+  //     lat: 45,
+  //     lng: -93
+  //   }
+  // });
 
-  App.LocationCollection = Backbone.GoogleMaps.LocationCollection.extend({
-    model: App.Location
-  });
+  // App.LocationCollection = Backbone.GoogleMaps.LocationCollection.extend({
+  //   model: Location,
+  //   url: '/locations'
+  // });
 
   // marker's info window
   App.InfoWindow = Backbone.GoogleMaps.InfoWindow.extend({
@@ -366,9 +366,12 @@ $(function(){
   });
 
   App.init = function() {
-    this.createMap();
 
-    this.places = new this.LocationCollection(museums);
+    this.createMap();
+    console.log("initting");
+    // console.log(App.LocationCollection);
+
+    this.places = Locations;
 
     // Render Markers
     var markerCollectionView = new this.MarkerCollectionView({
@@ -386,8 +389,8 @@ $(function(){
 
   App.createMap = function() {
     var mapOptions = {
-      center: new google.maps.LatLng(44.9796635, -93.2748776),
-      zoom: 11,
+      center: new google.maps.LatLng(37.7611615, -122.4368426),
+      zoom: 12,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
 
@@ -400,7 +403,7 @@ $(function(){
    * List view
   */
   App.ItemView = Backbone.View.extend({
-    template: '<%=name %>',
+    template: '<%=title %>',
     tagName: 'li',
 
     events: {
@@ -480,7 +483,7 @@ $(function(){
     // add one sample location to map and list view
     $('#addBtn').click(function() {
       App.places.add({
-        name: 'State Capitol Building',
+        title: 'State Capitol Building',
         lat: 44.9543075,
         lng: -93.102222
       });

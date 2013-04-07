@@ -11,23 +11,25 @@ DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/uber')
 class Location
   include DataMapper::Resource
   property :id,        Serial    # An auto-increment integer key
-  property :lat,  Float
-  property :lng, Float
+  property :lat,       Float
+  property :lng,       Float
   property :address,   String
-  property :name,      String
+  property :selected,  Boolean
+  property :title,     String
 
   def to_hash
     { :id        => id,
       :lat       => lat,
       :lng       => lng,
       :address   => address,
-      :name      => name }
+      :selected  => selected,
+      :title     => title }
   end
 end
 DataMapper.finalize
 
 # run this to migrate the db (add tables)
-# DataMapper.auto_migrate!
+DataMapper.auto_migrate!
 
 class App < Sinatra::Base
   enable   :raise_errors, :logging
