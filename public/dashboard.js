@@ -10,8 +10,8 @@ $(function(){
     // Default attributes for the todo item.
     defaults: function() {
       return {
-        longitude: 0.0,
-        latitude: 0.0,
+        lng: 0.0,
+        lat: 0.0,
         address: "123 Pleasant St",
         name: "Pleasantville"
       };
@@ -180,6 +180,7 @@ $(function(){
       this.listenTo(Locations, 'add',   this.addOne);
       this.listenTo(Locations, 'reset', this.addAll);
       this.listenTo(Locations, 'all',   this.render);
+      this.listenTo(Locations, 'refresh', this.addAll);
 
       // this.footer = this.$('footer');
       // this.main = $('#main');
@@ -213,14 +214,15 @@ $(function(){
       this.$("#favorite-locations").append(view.render().el);
     },
 
-    // Add all items in the **Todos** collection at once.
+    // Add all items in the **Locations** collection at once.
     addAll: function() {
-      $(this.el).empty();
+      console.log("addAll");
+      $("#location-template").empty();
       Locations.each(this.addOne, this);
     },
 
-    // If you hit return in the main input field, create new **Todo** model,
-    // persisting it to *localStorage*.
+    // If you hit return in the main input field, create new **Location** model,
+    // persisting it to *db*.
     createOnEnter: function(e) {
       if (e.keyCode != 13) return;
       if (!this.location_address.val() || !this.location_name.val()) return;
@@ -242,7 +244,6 @@ $(function(){
         this.location_name.val('');
         this.location_address.val('');
       }
-
     },
 
     successCallback: function() {
@@ -251,18 +252,16 @@ $(function(){
 
     // Clear all done todo items, destroying their models.
     clearCompleted: function() {
-      _.invoke(Locations.done(), 'destroy');
-      return false;
+      // _.invoke(Locations.done(), 'destroy');
+      // return false;
     },
 
     toggleAllComplete: function () {
       // var done = this.allCheckbox.checked;
       // Locations.each(function (todo) { todo.save({'done': done}); });
     }
-
   });
 
   // Finally, we kick things off by creating the **App**.
   var App = new AppView;
-
 });

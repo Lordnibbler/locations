@@ -11,15 +11,15 @@ DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/uber')
 class Location
   include DataMapper::Resource
   property :id,        Serial    # An auto-increment integer key
-  property :latitude,  Float
-  property :longitude, Float
+  property :lat,  Float
+  property :lng, Float
   property :address,   String
   property :name,      String
 
   def to_hash
     { :id        => id,
-      :latitude  => latitude,
-      :longitude => longitude,
+      :lat       => lat,
+      :lng       => lng,
       :address   => address,
       :name      => name }
   end
@@ -84,6 +84,8 @@ class App < Sinatra::Base
 
     # create a new location record in db
     location = Location.create(params)
+
+    location.to_json
   end
 
   # get '/create_sample_location' do
@@ -95,8 +97,8 @@ class App < Sinatra::Base
     if params
       geo_data = Geocoder.search(params["address"]).first
       params["address"] = geo_data.formatted_address
-      params["longitude"] = geo_data.longitude
-      params["latitude"] = geo_data.latitude
+      params["lng"] = geo_data.longitude
+      params["lat"] = geo_data.latitude
       params
     end
   end
