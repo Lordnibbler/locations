@@ -95,7 +95,7 @@ $(function(){
 
     // Re-render the titles of the todo item.
     render: function() {
-      console.log("rendering locationView")
+      // console.log("rendering locationView")
       this.$el.html(this.template(this.model.toJSON()));
       // this.$el.toggleClass('done', this.model.get('done'));
       // this.input = this.$('.edit');
@@ -173,7 +173,7 @@ $(function(){
 
       // this.input = this.$("#new-todo");
       this.location_address = this.$('#new-location-address');
-      this.location_name = this.$('#new-location-name');
+      this.location_name    = this.$('#new-location-name');
 
       // this.allCheckbox = this.$("#toggle-all")[0];
 
@@ -190,12 +190,13 @@ $(function(){
 
     fetchSuccessCallback: function() {
       console.log("fetch success");
+      console.log(Locations.toArray());
     },
 
     // Re-rendering the App just means refreshing the statistics -- the rest
     // of the app doesn't change.
     render: function() {
-      console.log("rendering appView");
+      // console.log("rendering appView");
       // var done = Locations.done().length;
       // var remaining = Locations.remaining().length;
 
@@ -309,7 +310,7 @@ $(function(){
     }
   ];
 
-  var App = {};
+  // var App = {};
 
 
   App.Location = Backbone.GoogleMaps.Location.extend({
@@ -324,11 +325,12 @@ $(function(){
     model: App.Location
   });
 
+  // marker's info window
   App.InfoWindow = Backbone.GoogleMaps.InfoWindow.extend({
     template: '#infoWindow-template',
 
     events: {
-      'mouseenter h2': 'logTest'
+      'mouseenter h4': 'logTest'
     },
 
     logTest: function() {
@@ -336,6 +338,7 @@ $(function(){
     }
   });
 
+  // marker itself (click+draggable)
   App.MarkerView = Backbone.GoogleMaps.MarkerView.extend({
     infoWindow: App.InfoWindow,
 
@@ -352,10 +355,12 @@ $(function(){
     },
 
     handleDragEnd: function(e) {
+      // see where user dropped marker
       alert('Dropped at: \n Lat: ' + e.latLng.lat() + '\n lng: ' + e.latLng.lng());
     }
   });
 
+  // collection of markerviews across the map (click+draggable)
   App.MarkerCollectionView = Backbone.GoogleMaps.MarkerCollectionView.extend({
     markerView: App.MarkerView
   });
@@ -462,14 +467,17 @@ $(function(){
   $(document).ready(function() {
     App.init();
 
+    // find bars
     $('#bars').click(function() {
       App.places.reset(bars);
     });
 
+    // find museums
     $('#museums').click(function() {
       App.places.reset(museums);
     });
 
+    // add one sample location to map and list view
     $('#addBtn').click(function() {
       App.places.add({
         name: 'State Capitol Building',
