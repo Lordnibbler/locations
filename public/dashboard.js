@@ -175,7 +175,7 @@ $(function(){
       this.location_address = this.$('#new-location-address');
       this.location_name = this.$('#new-location-name');
 
-      this.allCheckbox = this.$("#toggle-all")[0];
+      // this.allCheckbox = this.$("#toggle-all")[0];
 
       this.listenTo(Locations, 'add',   this.addOne);
       this.listenTo(Locations, 'reset', this.addAll);
@@ -184,7 +184,7 @@ $(function(){
       // this.footer = this.$('footer');
       // this.main = $('#main');
 
-      Locations.fetch();
+      Locations.fetch({ update: true });
     },
 
     // Re-rendering the App just means refreshing the statistics -- the rest
@@ -215,6 +215,7 @@ $(function(){
 
     // Add all items in the **Todos** collection at once.
     addAll: function() {
+      $(this.el).empty();
       Locations.each(this.addOne, this);
     },
 
@@ -224,10 +225,7 @@ $(function(){
       if (e.keyCode != 13) return;
       if (!this.location_address.val() || !this.location_name.val()) return;
 
-      Locations.create({name: this.location_name.val(), address: this.location_address.val()});
-      // clear the inputs
-      this.location_name.val('');
-      this.location_address.val('');
+      this.create();
     },
 
     create: function() {
@@ -247,6 +245,10 @@ $(function(){
 
     },
 
+    successCallback: function() {
+      console.log("added a new loc");
+    },
+
     // Clear all done todo items, destroying their models.
     clearCompleted: function() {
       _.invoke(Locations.done(), 'destroy');
@@ -254,8 +256,8 @@ $(function(){
     },
 
     toggleAllComplete: function () {
-      var done = this.allCheckbox.checked;
-      Locations.each(function (todo) { todo.save({'done': done}); });
+      // var done = this.allCheckbox.checked;
+      // Locations.each(function (todo) { todo.save({'done': done}); });
     }
 
   });
