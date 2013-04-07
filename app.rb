@@ -29,7 +29,7 @@ end
 DataMapper.finalize
 
 # run this to migrate the db (add tables)
-DataMapper.auto_migrate!
+# DataMapper.auto_migrate!
 
 class App < Sinatra::Base
   enable   :raise_errors, :logging
