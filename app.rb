@@ -70,7 +70,7 @@ class App < Sinatra::Base
     # update location record in db
     location.update(params)
 
-    # return JSON
+    # return JSON (required for backbone to auto update)
     location.to_json
   end
 
@@ -97,7 +97,7 @@ class App < Sinatra::Base
     # create a new location record in db
     location = Location.create(params)
 
-    # required for backbone to auto update
+    # return JSON (required for backbone to auto update)
     location.to_json
   end
 
