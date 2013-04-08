@@ -91,10 +91,7 @@ $(function(){
 
     // Re-render the titles of the todo item.
     render: function() {
-      // console.log("rendering locationView")
       this.$el.html(this.template(this.model.toJSON()));
-      // this.$el.toggleClass('done', this.model.get('done'));
-      // this.input = this.$('.edit');
       this.location_title   = this.$('.edit.location-title');
       this.location_address = this.$('.edit.location-address');
 
@@ -170,8 +167,7 @@ $(function(){
     },
 
     fetchSuccessCallback: function() {
-      // console.log("fetch success");
-      // console.log(_(Locations.models).clone());
+
     },
 
     // Re-rendering the App.  we don't have anything to do here yet.
@@ -188,7 +184,6 @@ $(function(){
 
     // Add all items in the **Locations** collection at once.
     addAll: function() {
-      console.log("addAll");
       $("#location-template").empty();
       Locations.each(this.addOne, this);
     },
@@ -220,7 +215,6 @@ $(function(){
     },
 
     createSuccessCallback: function() {
-      console.log("added a new location");
 
     }
   });
@@ -241,7 +235,7 @@ $(function(){
     },
 
     logTest: function() {
-      console.log('test in InfoWindow');
+      // console.log('test in InfoWindow');
     }
   });
 
@@ -299,20 +293,7 @@ $(function(){
     this.map = new google.maps.Map($('#map_canvas')[0], mapOptions);
   }
 
-  $(document).ready(function() {
-    App.init();
-
-    // add one sample location to map and list view
-    $('#addBtn').click(function() {
-      // console.log(App.places);
-      Locations.add([{
-        title: 'Example',
-        lat: 37.7714695,
-        lng: -122.4368426,
-        address: "500 haight st sf ca"
-      }]);
-    });
-  });
-
+  // start the maps portion of the app
+  App.init();
 
 });
