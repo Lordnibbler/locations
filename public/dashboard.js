@@ -77,11 +77,22 @@ $(function(){
     // The DOM events specific to a location.
     events: {
       "dblclick span"    : "edit",
+      // "click span"       : "selectItem",
+      'mouseenter': 'selectItem',
+      'mouseleave': 'deselectItem',
       "click a.edit"     : "edit",
       "click a.destroy"  : "clear",
       "keypress .edit"   : "updateOnEnter",
       "click a.btn.done" : "close",
       // "blur .edit"      : "close",
+    },
+
+    selectItem: function() {
+      this.model.select();
+    },
+
+    deselectItem: function() {
+      this.model.deselect();
     },
 
     // The LocationView listens for changes to its model, re-rendering. Since there's
@@ -90,6 +101,10 @@ $(function(){
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, 'destroy', this.remove);
+
+      // close marker window if open when removing
+      this.model.on("remove", this.close, this);
+
     },
 
     // Re-render the titles of the todo item.
@@ -273,58 +288,6 @@ $(function(){
   // Googlemaps.backbone
   // ---------------
 
-  // Sample Data
-  var museums = [
-    {
-      title: "Walker Art Center",
-      lat: 44.9796635,
-      lng: -93.2748776
-    },
-    {
-      title: "Science Museum of Minnesota",
-      lat: 44.9429618,
-      lng: -93.0981016
-    },
-    {
-      title: "The Museum of Russian Art",
-      lat: 44.9036337,
-      lng: -93.2755413
-    }
-  ];
-  var bars = [
-    {
-      title: "Park Tavern",
-      lat: 44.9413272,
-      lng: -93.3705791,
-    },
-    {
-      title: "Chatterbox Pub",
-      lat: 44.9393882,
-      lng: -93.2391039
-    },
-    {
-      title: "Acadia Cafe",
-      lat: 44.9709853,
-      lng: -93.2470717
-    }
-  ];
-
-  // var App = {};
-
-
-  // App.Location = Backbone.GoogleMaps.Location.extend({
-  //   idAttribute: 'title',
-  //   defaults: {
-  //     lat: 45,
-  //     lng: -93
-  //   }
-  // });
-
-  // App.LocationCollection = Backbone.GoogleMaps.LocationCollection.extend({
-  //   model: Location,
-  //   url: '/locations'
-  // });
-
   // marker's info window
   App.InfoWindow = Backbone.GoogleMaps.InfoWindow.extend({
     template: '#infoWindow-template',
@@ -368,8 +331,6 @@ $(function(){
   App.init = function() {
 
     this.createMap();
-    console.log("initting");
-    // console.log(App.LocationCollection);
 
     this.places = Locations;
 
@@ -397,75 +358,6 @@ $(function(){
     // Instantiate map
     this.map = new google.maps.Map($('#map_canvas')[0], mapOptions);
   }
-
-
-  /**
-   * List view
-  */
-  App.ItemView = Backbone.View.extend({
-    template: '<%=title %>',
-    tagName: 'li',
-
-    events: {
-      'mouseenter': 'selectItem',
-      'mouseleave': 'deselectItem'
-    },
-
-    initialize: function() {
-      _.bindAll(this, 'render', 'selectItem', 'deselectItem')
-
-      this.model.on("remove", this.close, this);
-    },
-
-    render: function() {
-      var html = _.template(this.template, this.model.toJSON());
-      this.$el.html(html);
-
-      return this;
-    },
-
-    close: function() {
-      this.$el.remove();
-    },
-
-    selectItem: function() {
-      this.model.select();
-    },
-
-    deselectItem: function() {
-      this.model.deselect();
-    }
-  });
-
-  App.ListView = Backbone.View.extend({
-    tagName: 'ul',
-    className: 'overlay',
-    id: 'listing',
-
-    initialize: function() {
-      _.bindAll(this, "refresh", "addChild");
-
-      this.collection.on("reset", this.refresh, this);
-      this.collection.on("add", this.addChild, this);
-
-      this.$el.appendTo('body');
-    },
-
-    render: function() {
-      this.collection.each(this.addChild);
-    },
-
-    addChild: function(childModel) {
-      var childView = new App.ItemView({ model: childModel });
-      childView.render().$el.appendTo(this.$el);
-    },
-
-    refresh: function() {
-      this.$el.empty();
-      this.render();
-    }
-  });
-
 
   $(document).ready(function() {
     App.init();

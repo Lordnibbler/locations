@@ -6,6 +6,7 @@
 }
 #favorite-locations li span {
   margin:10px 0;
+  cursor:pointer;
 }
 #favorite-locations li a.btn.done {
   display:none;
