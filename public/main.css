@@ -1,3 +1,6 @@
+#favorite-locations ul {
+  margin:0;
+}
 #favorite-locations li {
   list-style: none;
   border-bottom:1px solid #ccc;
