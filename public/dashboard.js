@@ -50,7 +50,7 @@ $(function(){
     // The DOM events specific to a location.
     events: {
       // "click span"       : "selectItem",
-      'click a.map'        : 'toggleSelect',
+      'click a.map'      : 'toggleSelect',
       // 'mouseleave'       : 'deselectItem',
       "dblclick span"    : "edit",
       "click a.edit"     : "edit",
@@ -77,17 +77,45 @@ $(function(){
     // app, we set a direct reference on the model for convenience.
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
-      this.listenTo(this.model, 'change', this.refreshMarkerCollectionView);
       this.listenTo(this.model, 'destroy', this.remove);
+
+      this.model.on("change:lat change:lng", this.refreshMarkerCollectionView, this);
 
       // close marker window if open when removing
       this.model.on("remove", this.close, this);
     },
 
-    refreshMarkerCollectionView: function() {
+    refreshMarkerCollectionView: function(loc) {
       // we also need to re-render the markers
+
+      // markerCollectionView.render();
+
       // console.log(markerCollectionView);
-      // if(markerCollectionView) App.MarkerCollectionView.render(Locations);
+      // if(markerCollectionView) App.MarkerCollectionView.refresh();
+      // App.MarkerCollectionView.refresh();
+      // markerCollectionView.closeChildren();
+      // if(loc.selected == true) {
+        // markerCollectionView.addChild(loc);
+      // }
+      // } else {
+        // markerCollectionView.closeChild(loc);
+      // }
+      console.log(loc);
+      // markerCollectionView.closeChildren();
+      // markerCollectionView.addChild(loc);
+      // markerCollectionView.refresh();
+
+      // Locations.reset();
+      // markerCollectionView.closeChildren();
+      // markerCollectionView.render();
+      console.log(App.MarkerView);
+
+      // Render Markers
+      var markerCollectionView = new Backbone.GoogleMaps.MarkerCollectionView({
+          collection: Locations,
+          map: App.map
+      });
+      markerCollectionView.render();
     },
 
     // Re-render the titles of the todo item.
@@ -167,7 +195,7 @@ $(function(){
       this.listenTo(Locations, 'reset', this.addAll);
       this.listenTo(Locations, 'all',   this.render);
 
-      Locations.fetch({ update: true, success:this.fetchSuccessCallback() });
+      Locations.fetch({ update: true, success: this.fetchSuccessCallback() });
     },
 
     fetchSuccessCallback: function() {
@@ -175,13 +203,12 @@ $(function(){
       // console.log(_(Locations.models).clone());
     },
 
-    // Re-rendering the App just means refreshing the statistics -- the rest
-    // of the app doesn't change.
+    // Re-rendering the App.  we don't have anything to do here yet.
     render: function() {
 
     },
 
-    // Add a single todo item to the list by creating a view for it, and
+    // Add a single location to the list by creating a view for it, and
     // appending its element to the `<ul>`.
     addOne: function(location) {
       var view = new LocationView({model: location});
@@ -205,7 +232,7 @@ $(function(){
     },
 
     create: function() {
-      // get name and address data
+      // get title and address data
       var location_address = this.location_address.val();
       var location_title = this.location_title.val();
       // validate that data exists
