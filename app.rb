@@ -10,11 +10,11 @@ DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/uber')
 
 class Location
   include DataMapper::Resource
-  property :id,        Serial    # An auto-increment integer key
+  property :id,        Serial,  :key => true    # An auto-increment integer key
   property :lat,       Float
   property :lng,       Float
-  property :address,   String
-  property :selected,  Boolean
+  property :address,   String,  :required => true
+  property :selected,  Boolean, :default => false
   property :title,     String
 
   def to_hash
@@ -26,6 +26,7 @@ class Location
       :title     => title }
   end
 end
+# After declaring all models, MUST finalize them:
 DataMapper.finalize
 
 # run this to migrate the db (add tables)
@@ -89,7 +90,6 @@ class App < Sinatra::Base
 
   post '/locations' do
     # CREATE a location
-
     # grab POST data
     params = JSON.parse(request.body.read.to_s)
 
