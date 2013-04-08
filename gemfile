@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 gem 'sinatra'
-gem 'sinatra-backbone'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
 gem 'json'

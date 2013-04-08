@@ -63,8 +63,6 @@ GEM
       rack (~> 1.5, >= 1.5.2)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
-    sinatra-backbone (0.1.0.rc2)
-      sinatra
     stringex (1.5.1)
     tilt (1.3.6)
     uuidtools (2.1.3)
@@ -78,4 +76,3 @@ DEPENDENCIES
   geocoder
   json
   sinatra
-  sinatra-backbone
