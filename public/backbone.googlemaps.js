@@ -218,6 +218,13 @@ Backbone.GoogleMaps = (function(Backbone, _, $){
 			// Show detail view on model select
 			this.model.on("selected", this.openDetail, this);
 			this.model.on("deselected", this.closeDetail, this);
+			this.model.on("change:lat", this.refreshOverlay, this);
+		},
+
+		refreshOverlay: function() {
+			this.gOverlay.setOptions({
+				position: this.model.getLatlng()
+			});
 		},
 
 		toggleSelect: function() {

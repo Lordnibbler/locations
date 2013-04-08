@@ -86,36 +86,7 @@ $(function(){
     },
 
     refreshMarkerCollectionView: function(loc) {
-      // we also need to re-render the markers
 
-      // markerCollectionView.render();
-
-      // console.log(markerCollectionView);
-      // if(markerCollectionView) App.MarkerCollectionView.refresh();
-      // App.MarkerCollectionView.refresh();
-      // markerCollectionView.closeChildren();
-      // if(loc.selected == true) {
-        // markerCollectionView.addChild(loc);
-      // }
-      // } else {
-        // markerCollectionView.closeChild(loc);
-      // }
-      console.log(loc);
-      // markerCollectionView.closeChildren();
-      // markerCollectionView.addChild(loc);
-      // markerCollectionView.refresh();
-
-      // Locations.reset();
-      // markerCollectionView.closeChildren();
-      // markerCollectionView.render();
-      console.log(App.MarkerView);
-
-      // Render Markers
-      var markerCollectionView = new Backbone.GoogleMaps.MarkerCollectionView({
-          collection: Locations,
-          map: App.map
-      });
-      markerCollectionView.render();
     },
 
     // Re-render the titles of the todo item.
