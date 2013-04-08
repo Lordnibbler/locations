@@ -41,14 +41,8 @@ class App < Sinatra::Base
   set :public_folder, File.expand_path('../public', __FILE__)
 
   get '/' do
-    erb :home
-  end
-
-  get '/dashboard' do
-    # erb :dashboard
     send_file "dashboard.html"
   end
-
 
   get '/locations/:id' do
     # get a single location
