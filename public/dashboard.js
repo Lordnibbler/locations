@@ -77,10 +77,17 @@ $(function(){
     // app, we set a direct reference on the model for convenience.
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.model, 'change', this.refreshMarkerCollectionView);
       this.listenTo(this.model, 'destroy', this.remove);
 
       // close marker window if open when removing
       this.model.on("remove", this.close, this);
+    },
+
+    refreshMarkerCollectionView: function() {
+      // we also need to re-render the markers
+      // console.log(markerCollectionView);
+      // if(markerCollectionView) App.MarkerCollectionView.render(Locations);
     },
 
     // Re-render the titles of the todo item.
@@ -206,7 +213,8 @@ $(function(){
         // no data
       } else {
         // create a new model
-        Locations.create({ title: location_title, address: location_address }, { success: this.createSuccessCallback() });
+        var loc = Locations.create({ title: location_title, address: location_address }, { success: this.createSuccessCallback() });
+
         // clear the inputs
         this.location_title.val('');
         this.location_address.val('');
@@ -214,7 +222,8 @@ $(function(){
     },
 
     createSuccessCallback: function() {
-      console.log("added a new loc");
+      console.log("added a new location");
+
     }
   });
 
@@ -265,6 +274,7 @@ $(function(){
     markerView: App.MarkerView
   });
 
+  var markerCollectionView;
   App.init = function() {
 
     this.createMap();
@@ -272,7 +282,7 @@ $(function(){
     this.places = Locations;
 
     // Render Markers
-    var markerCollectionView = new this.MarkerCollectionView({
+    markerCollectionView = new this.MarkerCollectionView({
       collection: this.places,
       map: this.map
     });
@@ -296,7 +306,7 @@ $(function(){
 
     // add one sample location to map and list view
     $('#addBtn').click(function() {
-      console.log(App.places);
+      // console.log(App.places);
       Locations.add([{
         title: 'Example',
         lat: 37.7714695,

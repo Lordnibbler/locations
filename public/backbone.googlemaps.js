@@ -286,6 +286,7 @@ Backbone.GoogleMaps = (function(Backbone, _, $){
 			// Bind to collection
 			this.collection.on("reset", this.refresh, this);
 			this.collection.on("add", this.addChild, this);
+			this.collection.on("change", this.addChild, this); // monkeypatch
 			this.collection.on("remove", this.closeChild, this);
 		},
 
