@@ -13,7 +13,7 @@ class Location
   property :id,        Serial,  :key => true    # An auto-increment integer key
   property :lat,       Float
   property :lng,       Float
-  property :address,   String,  :required => true
+  property :address,   Text,  :required => true
   property :selected,  Boolean, :default => false
   property :title,     String
 
