@@ -45,15 +45,42 @@ class App < Sinatra::Base
   end
 
   get '/locations/:id' do
-    # get a single location
+    # GET a single location
+    content_type :json
+
     location = Location.get(params[:id])
     # params = JSON.parse(request.body.read.to_s)
+    location.to_json
+  end
+
+  get '/locations' do
+    # GET all locations
+    content_type :json
+
+    Location.all.to_json
+  end
+
+  post '/locations' do
+    # POST (create) a location
+    content_type :json
+
+    # grab POST data
+    params = JSON.parse(request.body.read.to_s)
+
+    # geocode the address
+    params = geo_code(params)
+
+    # create a new location record in db
+    location = Location.create(params)
+
+    # return JSON (required for backbone to auto update)
     location.to_json
   end
 
   put '/locations/:id' do
     # PUT (update) an existing location
     # update this to check if params are different from location
+    content_type :json
 
     # get existing location from db
     location = Location.get(params[:id])
@@ -71,31 +98,12 @@ class App < Sinatra::Base
     location.to_json
   end
 
-  get '/locations' do
-    # GET all locations
-    Location.all.to_json
-  end
-
   delete '/locations/:id' do
     # DELETE a location
     location = Location.get(params[:id])
     location.destroy
   end
 
-  post '/locations' do
-    # CREATE a location
-    # grab POST data
-    params = JSON.parse(request.body.read.to_s)
-
-    # geocode the address
-    params = geo_code(params)
-
-    # create a new location record in db
-    location = Location.create(params)
-
-    # return JSON (required for backbone to auto update)
-    location.to_json
-  end
 
   # get '/create_sample_location' do
   #   # Location.auto_migrate!
