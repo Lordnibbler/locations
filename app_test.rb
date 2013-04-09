@@ -23,7 +23,7 @@ class HelloWorldTest < Test::Unit::TestCase
   end
 
   def test_it_creates_new_location
-    # post '/locations', {"title"=>"Home", "address"=>"900 Haight Street sf ca", "lat"=>37.7713501, "lng"=>-122.4372894, "selected"=>false}
+    # post '/locations', {"title"=>"Home", "address"=>"900 Haight Street, San Francisco, CA 94117, USA", "lat"=>37.7713501, "lng"=>-122.4372894, "selected"=>false}
     # puts last_response.body
   end
 
