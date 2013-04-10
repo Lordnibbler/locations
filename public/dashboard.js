@@ -7,7 +7,7 @@ $(function(){
   // Our basic **Location** model has `long`, `lat`, `address`, and `name` attributes.
   var Location = Backbone.GoogleMaps.Location.extend({
 
-    // Default attributes for the todo item.
+    // Default attributes for the location item.
     defaults: function() {
       return {
         lng: 0.0,
@@ -28,7 +28,7 @@ $(function(){
     model: Location,
 
     // Save all of the locations under the `"locations"` namespace.
-    // localStorage: new Backbone.LocalStorage("todos-backbone"),
+    // localStorage: new Backbone.LocalStorage("locations-backbone"),
     url: '/locations'
   });
 
@@ -89,7 +89,7 @@ $(function(){
 
     },
 
-    // Re-render the titles of the todo item.
+    // Re-render the titles of the location item.
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
       this.location_title   = this.$('.edit.location-title');
@@ -106,7 +106,7 @@ $(function(){
       // this.location_title.focus();
     },
 
-    // Close the `"editing"` mode, saving changes to the todo.
+    // Close the `"editing"` mode, saving changes to the location.
     close: function() {
       // this.deselect();
       var location_title = this.location_title.val();
@@ -149,9 +149,9 @@ $(function(){
       "keypress input"      : "createOnEnter",
     },
 
-    // At initialization we bind to the relevant events on the `Todos`
+    // At initialization we bind to the relevant events on the `locations`
     // collection, when items are added or changed. Kick things off by
-    // loading any preexisting todos that might be saved in *localStorage*.
+    // loading any preexisting locations that might be saved in *localStorage*.
     initialize: function() {
       this.location_address = this.$('#new-location-address');
       this.location_title    = this.$('#new-location-title');
